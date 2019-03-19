@@ -10,10 +10,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>Java-High-Concurrency-Programming</module>
-        <module>Java-Multi-Thread-Programming</module>
-        <module>Java-Multi-Thread-Self</module>
-        <module>Java-Multi-Thread-Guide</module>
-        <module>Java-Concurrent-Programming-Beauty</module>
     </modules>
     <build>
         <plugins>
