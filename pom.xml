@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.multi.thread</groupId>
-    <artifactId>Java-Multi-Thread</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <!-- 基本信息 -->
+    <description>SpringBoot 多模块构建示例</description>
+    <modelVersion>4.0.0</modelVersion>
+    <name>spring-book-code</name>
     <packaging>pom</packaging>
+
+    <!-- 项目说明：这里作为聚合工程的父工程 -->
+    <groupId>com.spring.book</groupId>
+    <artifactId>spring-book-code</artifactId>
+    <version>1.0.0.SNAPSHOT</version>
+
+    <!-- 继承说明：这里继承SpringBoot提供的父工程 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.3.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
     <modules>
-        <module>Java-High-Concurrency-Programming</module>
+        <module>spring-boot-self</module>
     </modules>
     <build>
         <plugins>
@@ -24,4 +37,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
