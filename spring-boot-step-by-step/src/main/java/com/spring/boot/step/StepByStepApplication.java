@@ -19,9 +19,6 @@ public class StepByStepApplication {
 
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext context = SpringApplication.run(StepByStepApplication.class, args);
-        //ServletRegistrationBean bean = (ServletRegistrationBean)context.getBean("druidStatViewServlet");
-        //System.out.println(bean.getInitParameters());
-        //System.out.println(bean.getUrlMappings());
         DruidDataSource druidDataSource = (DruidDataSource)context.getBean(DruidDataSource.class);
         System.out.println(druidDataSource.getConnection());
     }
