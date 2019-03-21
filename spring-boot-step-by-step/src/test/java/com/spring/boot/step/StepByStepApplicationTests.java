@@ -1,6 +1,7 @@
 package com.spring.boot.step;
 
 import com.spring.boot.step.model.AyUser;
+import com.spring.boot.step.repository.AyUserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,5 +44,14 @@ public class StepByStepApplicationTests {
         for (AyUser user : userList) {
             System.out.println("[id]:" + user.getId() + ";[name]:" + user.getName());
         }
+    }
+
+    @Resource
+    private AyUserRepository ayUserRepository;
+
+    @Test
+    public void testRespority() {
+        List<AyUser> userList = ayUserRepository.findAll();
+        System.out.println("findAll():" + userList.size());
     }
 }
