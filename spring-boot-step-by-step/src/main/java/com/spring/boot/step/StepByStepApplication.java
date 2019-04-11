@@ -22,5 +22,4 @@ public class StepByStepApplication {
         DruidDataSource druidDataSource = (DruidDataSource)context.getBean(DruidDataSource.class);
         System.out.println(druidDataSource.getConnection());
     }
-
 }
