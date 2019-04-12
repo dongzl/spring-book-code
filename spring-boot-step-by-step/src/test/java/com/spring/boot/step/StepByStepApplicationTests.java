@@ -2,8 +2,10 @@ package com.spring.boot.step;
 
 import com.spring.boot.step.model.AyUser;
 import com.spring.boot.step.repository.AyUserRepository;
+import com.spring.boot.step.service.IAyUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -53,5 +55,17 @@ public class StepByStepApplicationTests {
     public void testRespority() {
         List<AyUser> userList = ayUserRepository.findAll();
         System.out.println("findAll():" + userList.size());
+    }
+
+    @Autowired
+    private IAyUserService ayUserService;
+
+    @Test
+    public void testTransaction() {
+        AyUser user = new AyUser();
+        user.setId("3");
+        user.setName("阿华");
+        user.setPassword("123");
+        ayUserService.save(user);
     }
 }

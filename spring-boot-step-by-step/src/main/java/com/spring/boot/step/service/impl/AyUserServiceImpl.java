@@ -6,6 +6,7 @@ import com.spring.boot.step.service.IAyUserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Collection;
@@ -17,6 +18,7 @@ import java.util.List;
  * @date 2019-03-21 10:11
  */
 @Service
+@Transactional
 public class AyUserServiceImpl implements IAyUserService {
 
     @Resource
@@ -33,6 +35,7 @@ public class AyUserServiceImpl implements IAyUserService {
     }
 
     @Override
+    @Transactional
     public AyUser save(AyUser user) {
         return ayUserRepository.save(user);
     }
