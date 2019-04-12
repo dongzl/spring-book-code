@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -67,5 +69,22 @@ public class StepByStepApplicationTests {
         user.setName("阿华");
         user.setPassword("123");
         ayUserService.save(user);
+    }
+
+    @Resource
+    private RedisTemplate redisTemplate;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Test
+    public void testRedis() {
+        redisTemplate.opsForValue().set("name", "ay");
+        String name = (String)redisTemplate.opsForValue().get("name");
+        System.out.println(name);
+        redisTemplate.delete("name");
+        redisTemplate.opsForValue().set("name", "a1");
+        name = stringRedisTemplate.opsForValue().get("name");
+        System.out.println(name);
     }
 }
