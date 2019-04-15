@@ -2,6 +2,8 @@ package com.spring.boot.step.listener;
 
 import com.spring.boot.step.model.AyUser;
 import com.spring.boot.step.service.IAyUserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
@@ -18,6 +20,8 @@ import java.util.List;
 @WebListener
 public class AyUserListener implements ServletContextListener {
 
+    Logger logger = LogManager.getLogger(this.getClass());
+
     @Resource
     private RedisTemplate redisTemplate;
 
@@ -32,12 +36,15 @@ public class AyUserListener implements ServletContextListener {
         redisTemplate.delete(ALL_USER);
         redisTemplate.opsForList().leftPushAll(ALL_USER, ayUserList);
         List<AyUser> queryUserList = redisTemplate.opsForList().range(ALL_USER, 0, -1);
-        System.out.println("缓存中目前的用户数有：" + queryUserList.size() + "人");
-        System.out.println("ServletContext初始化上下文");
+        //System.out.println("缓存中目前的用户数有：" + queryUserList.size() + "人");
+        //System.out.println("ServletContext初始化上下文");
+        logger.info("缓存中目前的用户数有：" + queryUserList.size() + "人");
+        logger.info("ServletContext初始化上下文");
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("ServletContext上下文销毁");
+//        System.out.println("ServletContext上下文销毁");
+        logger.info("ServletContext上下文销毁");
     }
 }
