@@ -6,12 +6,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.Resource;
 
 @SpringBootApplication
 @ServletComponentScan
+@ImportResource(locations = {"classpath:spring-mvc.xml"})
 public class StepByStepApplication {
 
     @Resource
