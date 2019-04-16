@@ -1,5 +1,6 @@
 package com.spring.boot.step.service.impl;
 
+import com.spring.boot.step.dao.AyUserDao;
 import com.spring.boot.step.model.AyUser;
 import com.spring.boot.step.repository.AyUserRepository;
 import com.spring.boot.step.service.IAyUserService;
@@ -27,6 +28,9 @@ public class AyUserServiceImpl implements IAyUserService {
 
     @Resource
     private RedisTemplate redisTemplate;
+
+    @Resource
+    private AyUserDao ayUserDao;
 
     private static final String ALL_USER = "ALL_USER_LIST";
 
@@ -81,5 +85,10 @@ public class AyUserServiceImpl implements IAyUserService {
     @Override
     public List<AyUser> findByIdIn(Collection<String> ids) {
         return ayUserRepository.findByIdIn(ids);
+    }
+
+    @Override
+    public AyUser findByNameAndPassword(String name, String password) {
+        return ayUserDao.findByNameAndPassword(name, password);
     }
 }

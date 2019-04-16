@@ -3,6 +3,8 @@ package com.spring.boot.step;
 import com.spring.boot.step.model.AyUser;
 import com.spring.boot.step.repository.AyUserRepository;
 import com.spring.boot.step.service.IAyUserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class StepByStepApplicationTests {
+
+    Logger logger = LogManager.getLogger(this.getClass());
 
     @Resource
     JdbcTemplate jdbcTemplate;
@@ -86,5 +90,11 @@ public class StepByStepApplicationTests {
         redisTemplate.opsForValue().set("name", "a1");
         name = stringRedisTemplate.opsForValue().get("name");
         System.out.println(name);
+    }
+
+    @Test
+    public void testMybaits() {
+        AyUser ayUser = ayUserService.findByNameAndPassword("阿毅", "123456");
+        logger.info("==========" + ayUser.getName());
     }
 }
