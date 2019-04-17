@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * @author dongzonglei
@@ -31,4 +32,6 @@ public interface IAyUserService {
     List<AyUser> findByIdIn(Collection<String> ids);
 
     AyUser findByNameAndPassword(String name, String password);
+
+    Future<List<AyUser>> findAsynAll();
 }

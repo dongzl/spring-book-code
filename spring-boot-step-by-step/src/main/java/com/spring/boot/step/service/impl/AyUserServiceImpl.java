@@ -4,15 +4,21 @@ import com.spring.boot.step.dao.AyUserDao;
 import com.spring.boot.step.model.AyUser;
 import com.spring.boot.step.repository.AyUserRepository;
 import com.spring.boot.step.service.IAyUserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * @author dongzonglei
@@ -22,6 +28,8 @@ import java.util.List;
 @Service
 @Transactional
 public class AyUserServiceImpl implements IAyUserService {
+
+    private static final Logger logger = LogManager.getLogger(AyUserServiceImpl.class);
 
     @Resource
     private AyUserRepository ayUserRepository;
@@ -53,7 +61,17 @@ public class AyUserServiceImpl implements IAyUserService {
 
     @Override
     public List<AyUser> findAll() {
-        return ayUserRepository.findAll();
+        try {
+            System.out.println("开始做任务");
+            long start = System.currentTimeMillis();
+            List<AyUser> ayUserList = ayUserRepository.findAll();
+            long end = System.currentTimeMillis();
+            System.out.println("完成任务，耗时：" + (end - start) + "毫秒");
+            return ayUserList;
+        } catch (Exception e) {
+            logger.error("method [findAll] error", e);
+            return Collections.EMPTY_LIST;
+        }
     }
 
     @Override
@@ -90,5 +108,21 @@ public class AyUserServiceImpl implements IAyUserService {
     @Override
     public AyUser findByNameAndPassword(String name, String password) {
         return ayUserDao.findByNameAndPassword(name, password);
+    }
+
+    @Override
+    @Async
+    public Future<List<AyUser>> findAsynAll() {
+        try {
+            System.out.println("开始做任务");
+            long start = System.currentTimeMillis();
+            List<AyUser> ayUserList = ayUserRepository.findAll();
+            long end = System.currentTimeMillis();
+            System.out.println("完成任务，耗时：" + (end - start) + "毫秒");
+            return new AsyncResult<>(ayUserList);
+        } catch (Exception e) {
+            logger.error("method [findAll] error", e);
+            return new AsyncResult<>(null);
+        }
     }
 }

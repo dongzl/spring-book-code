@@ -1,8 +1,13 @@
 package com.spring.boot.step;
 
+import com.spring.boot.step.model.AyMood;
 import com.spring.boot.step.model.AyUser;
+import com.spring.boot.step.mq.AyMoodProducer;
 import com.spring.boot.step.repository.AyUserRepository;
+import com.spring.boot.step.service.IAyMoodService;
 import com.spring.boot.step.service.IAyUserService;
+import org.apache.activemq.command.ActiveMQDestination;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
@@ -13,11 +18,14 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import javax.jms.Destination;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -96,5 +104,40 @@ public class StepByStepApplicationTests {
     public void testMybaits() {
         AyUser ayUser = ayUserService.findByNameAndPassword("阿毅", "123456");
         logger.info("==========" + ayUser.getName());
+    }
+
+    @Resource
+    private IAyMoodService ayMoodService;
+
+    @Test
+    public void testAyMood() {
+        AyMood ayMood = new AyMood();
+        ayMood.setId("1");
+        ayMood.setUserId("1");
+        ayMood.setPraiseNum(0);
+        ayMood.setContent("这是我的第一条微信说说！！");
+        ayMood.setPublishTime(new Date());
+        AyMood mood = ayMoodService.save(ayMood);
+    }
+
+    @Resource
+    private AyMoodProducer ayMoodProducer;
+
+    @Test
+    public void testActiveMQ() {
+        Destination destination = new ActiveMQQueue("ay.queue");
+        ayMoodProducer.sendMessage(destination, "hello,mq!!!");
+    }
+
+    @Test
+    public void testActiveMQAsynSave() {
+        AyMood ayMood = new AyMood();
+        ayMood.setId("2");
+        ayMood.setUserId("2");
+        ayMood.setPraiseNum(0);
+        ayMood.setContent("这是我的第一条微信说说！！！");
+        ayMood.setPublishTime(new Date());
+        String msg = ayMoodService.asynSave(ayMood);
+        System.out.println("异步发表说说：" + msg);
     }
 }

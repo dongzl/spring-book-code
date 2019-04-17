@@ -8,12 +8,14 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import javax.annotation.Resource;
 
 @SpringBootApplication
 @ServletComponentScan
 @ImportResource(locations = {"classpath:spring-mvc.xml"})
+@EnableAsync
 public class StepByStepApplication {
 
     @Resource
