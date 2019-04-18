@@ -1,5 +1,6 @@
 package com.spring.boot.step.controller;
 
+import com.spring.boot.step.exception.BusinessException;
 import com.spring.boot.step.model.AyUser;
 import com.spring.boot.step.service.IAyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,17 @@ public class AyUserController {
     @Autowired
     private IAyUserService ayUserService;
 
-    @RequestMapping("/test")
+    @RequestMapping("/findAll")
     public String test(Model model) {
         List<AyUser> ayUser = ayUserService.findAll();
         model.addAttribute("users", ayUser);
-        return "ayUser";
+        throw new BusinessException("业务异常");
+    }
+
+    @RequestMapping("/findByNameAndPasswordRetry")
+    public String findByNameAndPasswordRetry(Model model) {
+        AyUser ayUser = ayUserService.findByNameAndPasswordRetry("阿毅", "123456");
+        model.addAttribute("users", ayUser);
+        return "success";
     }
 }

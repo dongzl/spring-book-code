@@ -31,7 +31,7 @@ public class SendMailQuartz {
     @Autowired
     private ISendJunkMailService sendJunkMailService;
 
-    @Scheduled(cron = "*/5 * * * * *")
+    //@Scheduled(cron = "*/5 * * * * *")
     public void run() {
 
         List<AyUser> ayUserList = ayUserService.findAll();
