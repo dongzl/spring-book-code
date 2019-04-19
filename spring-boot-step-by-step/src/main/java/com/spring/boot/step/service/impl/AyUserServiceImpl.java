@@ -135,4 +135,9 @@ public class AyUserServiceImpl implements IAyUserService {
         System.out.println("[findByNameAndPasswordRetry]方法重试失败了");
         throw new BusinessException();
     }
+
+    @Override
+    public AyUser findByUserName(String userName) {
+        return ayUserRepository.findFirstByName(userName);
+    }
 }

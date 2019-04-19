@@ -17,6 +17,8 @@ public interface IAyUserService {
 
     AyUser findById(String id);
 
+    AyUser findByUserName(String userName);
+
     List<AyUser> findAll();
 
     AyUser save(AyUser user);

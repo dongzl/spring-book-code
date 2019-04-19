@@ -18,4 +18,6 @@ public interface AyUserRepository extends JpaRepository<AyUser, String> {
     List<AyUser> findByNameLike(String name);
 
     List<AyUser> findByIdIn(Collection<String> ids);
+
+    AyUser findFirstByName(String name);
 }

@@ -23,10 +23,17 @@ public class AyUserController {
     private IAyUserService ayUserService;
 
     @RequestMapping("/findAll")
-    public String test(Model model) {
+    public String findAll(Model model) {
         List<AyUser> ayUser = ayUserService.findAll();
         model.addAttribute("users", ayUser);
         throw new BusinessException("业务异常");
+    }
+
+    @RequestMapping("/test")
+    public String test(Model model) {
+        List<AyUser> ayUser = ayUserService.findAll();
+        model.addAttribute("users", ayUser);
+        return "success";
     }
 
     @RequestMapping("/findByNameAndPasswordRetry")
