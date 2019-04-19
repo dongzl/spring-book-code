@@ -2,9 +2,11 @@ package com.spring.boot.step;
 
 import com.spring.boot.step.model.AyMood;
 import com.spring.boot.step.model.AyUser;
+import com.spring.boot.step.model.AyUserAttachmentRel;
 import com.spring.boot.step.mq.AyMoodProducer;
 import com.spring.boot.step.repository.AyUserRepository;
 import com.spring.boot.step.service.IAyMoodService;
+import com.spring.boot.step.service.IAyUserAttachmentRelService;
 import com.spring.boot.step.service.IAyUserService;
 import org.apache.activemq.command.ActiveMQDestination;
 import org.apache.activemq.command.ActiveMQQueue;
@@ -139,5 +141,18 @@ public class StepByStepApplicationTests {
         ayMood.setPublishTime(new Date());
         String msg = ayMoodService.asynSave(ayMood);
         System.out.println("异步发表说说：" + msg);
+    }
+
+    @Resource
+    private IAyUserAttachmentRelService ayUserAttachmentRelService;
+
+    @Test
+    public void testMongoDB() {
+        AyUserAttachmentRel ayUserAttachmentRel = new AyUserAttachmentRel();
+        ayUserAttachmentRel.setId("1");
+        ayUserAttachmentRel.setUserId("1");
+        ayUserAttachmentRel.setFileName("个人简历.doc");
+        ayUserAttachmentRelService.save(ayUserAttachmentRel);
+        System.out.println("保存成功");
     }
 }
