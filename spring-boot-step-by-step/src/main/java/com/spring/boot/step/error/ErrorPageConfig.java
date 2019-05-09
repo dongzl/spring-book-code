@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @description
  * @date 2019-04-18 18:33
  */
-@Component
+//@Component
 public class ErrorPageConfig implements ErrorPageRegistrar {
 
     @Override

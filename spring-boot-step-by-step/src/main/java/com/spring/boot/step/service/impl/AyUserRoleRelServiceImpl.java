@@ -3,6 +3,7 @@ package com.spring.boot.step.service.impl;
 import com.spring.boot.step.model.AyUserRoleRel;
 import com.spring.boot.step.repository.AyUserRoleRelRepository;
 import com.spring.boot.step.service.IAyUserRoleRelService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  * @description
  * @date 2019-04-19 14:46
  */
+@Service
 public class AyUserRoleRelServiceImpl implements IAyUserRoleRelService {
 
     @Resource

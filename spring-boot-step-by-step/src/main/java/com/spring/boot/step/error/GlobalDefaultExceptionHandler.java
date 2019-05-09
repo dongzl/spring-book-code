@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
  * @description
  * @date 2019-04-18 18:45
  */
-@ControllerAdvice(basePackages = {"com.spring.boot.step"})
+//@ControllerAdvice(basePackages = {"com.spring.boot.step"})
 public class GlobalDefaultExceptionHandler {
 
     @ExceptionHandler({BusinessException.class})
