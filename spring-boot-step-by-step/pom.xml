@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.spring.book</groupId>
     <artifactId>spring-boot-step-by-step</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>spring-boot-step-by-step</name>
     <description>一步一步学Spring Boot 2</description>
 
