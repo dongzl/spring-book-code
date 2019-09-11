@@ -1,5 +1,7 @@
 package com.spring.boot.self;
 
+import com.spring.study.module.HelloService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,8 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableAutoConfiguration
 public class Hello {
 
+    @Autowired
+    private HelloService helloService;
+
     @RequestMapping("/hello")
     public String hello() {
-        return "Hello For Mac";
+        return helloService.sayHello();
+        //return "Hello For Mac";
     }
 }

@@ -25,6 +25,7 @@
         <module>spring-boot-self</module>
         <module>spring-boot-step-by-step</module>
         <module>spring-code-self</module>
+        <module>spring-code-first-starter</module>
     </modules>
 
     <build>
