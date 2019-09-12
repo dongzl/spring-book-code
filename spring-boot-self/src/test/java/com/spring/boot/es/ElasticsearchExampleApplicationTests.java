@@ -1,5 +1,6 @@
 package com.spring.boot.es;
 
+import com.spring.boot.DemoApplication;
 import com.spring.boot.es.entity.Commodity;
 import com.spring.boot.es.service.CommodityService;
 import org.junit.Test;
@@ -17,7 +18,7 @@ import java.util.List;
  * @date 2019-09-11 16:57
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = ElasticsearchExampleApplication.class)
+@SpringBootTest(classes = DemoApplication.class)
 public class ElasticsearchExampleApplicationTests {
 
     @Autowired
