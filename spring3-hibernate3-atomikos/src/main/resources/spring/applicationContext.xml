@@ -16,11 +16,7 @@
     <description>多数源 JTA 配置例子,本例子同时使用 2 个 MySQL 数据同时提交、回滚事务</description>
 
     <!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
-    <context:component-scan base-package="com.spring.code.atomikos">
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-    </context:component-scan>
-
-    <context:property-placeholder ignore-resource-not-found="true" location="classpath*:/application.properties" />
+    <context:property-placeholder ignore-resource-not-found="true" location="classpath*:application.properties" />
 
     <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp">
         <property name="transactionTimeout" value="300" />
@@ -65,13 +61,14 @@
 
     <!-- Jpa Entity Manager 配置 -->
     <bean id="userEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="persistenceXmlLocation" value="classpath*:persistence.xml" />
-        <property name="persistenceUnitName" value="mysql_user_unit" />
+        <!--        <property name="persistenceXmlLocation" value="classpath*:persistence.xml" />-->
+        <!--        <property name="persistenceUnitName" value="mysql_user_unit" />-->
         <property name="dataSource" ref="userDataSource" />
         <property name="jpaVendorAdapter" ref="userHibernateJpaVendorAdapter" />
         <property name="jpaProperties">
             <props>
                 <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.connection.driver_class">com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</prop>
                 <prop key="hibernate.current_session_context_class">jta</prop>
                 <prop key="hibernate.transaction.manager_lookup_class">com.atomikos.icatch.jta.hibernate3.TransactionManagerLookup
@@ -86,6 +83,11 @@
         <property name="showSql" value="true"/>
         <property name="generateDdl" value="true"/>
     </bean>
+
+    <!-- Spring Data Jpa配置, 扫描base-package下所有继承于Repository<T,ID>的接口 -->
+    <jpa:repositories base-package="com.spring.code.atomikos.user.repository"
+                      transaction-manager-ref="transactionManager"
+                      entity-manager-factory-ref="userEntityManagerFactory" />
 
     <!-- MySQL Order DB 数据源配置 -->
     <bean id="orderDataSource" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
@@ -106,13 +108,14 @@
 
     <!-- Jpa Entity Manager 配置 -->
     <bean id="orderEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="persistenceXmlLocation" value="classpath*:persistence.xml" />
-        <property name="persistenceUnitName" value="mysql_order_unit" />
+        <!--        <property name="persistenceXmlLocation" value="classpath*:persistence.xml" />-->
+        <!--        <property name="persistenceUnitName" value="mysql_order_unit" />-->
         <property name="dataSource" ref="orderDataSource" />
         <property name="jpaVendorAdapter" ref="orderHibernateJpaVendorAdapter" />
         <property name="jpaProperties">
             <props>
                 <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.connection.driver_class">com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</prop>
                 <prop key="hibernate.current_session_context_class">jta</prop>
                 <prop key="hibernate.transaction.manager_lookup_class">com.atomikos.icatch.jta.hibernate3.TransactionManagerLookup
@@ -132,4 +135,4 @@
     <jpa:repositories base-package="com.spring.code.atomikos.order.repository"
                       transaction-manager-ref="transactionManager"
                       entity-manager-factory-ref="orderEntityManagerFactory" />
-</beans>
+</beans>    
