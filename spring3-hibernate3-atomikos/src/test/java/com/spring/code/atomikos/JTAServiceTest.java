@@ -31,7 +31,7 @@ public class JTAServiceTest extends AbstractTransactionalJUnit4SpringContextTest
         UserInfoDO userInfoDO = new UserInfoDO();
         userInfoDO.setUserName("test");
         userInfoDao.save(userInfoDO);
-        //Assert.assertNotNull(userInfoDO.getUserId());
+        Assert.assertNotNull(userInfoDO.getUserId());
     }
 
     /**
