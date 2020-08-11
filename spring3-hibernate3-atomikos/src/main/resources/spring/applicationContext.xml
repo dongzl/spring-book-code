@@ -61,10 +61,13 @@
 
     <!-- Jpa Entity Manager 配置 -->
     <bean id="userEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <!--        <property name="persistenceXmlLocation" value="classpath*:persistence.xml" />-->
-        <!--        <property name="persistenceUnitName" value="mysql_user_unit" />-->
         <property name="dataSource" ref="userDataSource" />
-        <property name="jpaVendorAdapter" ref="userHibernateJpaVendorAdapter" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="generateDdl" value="false"/>
+                <property name="database" value="MYSQL"/>
+            </bean>
+        </property>
         <property name="jpaProperties">
             <props>
                 <prop key="hibernate.format_sql">true</prop>
@@ -108,10 +111,13 @@
 
     <!-- Jpa Entity Manager 配置 -->
     <bean id="orderEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <!--        <property name="persistenceXmlLocation" value="classpath*:persistence.xml" />-->
-        <!--        <property name="persistenceUnitName" value="mysql_order_unit" />-->
         <property name="dataSource" ref="orderDataSource" />
-        <property name="jpaVendorAdapter" ref="orderHibernateJpaVendorAdapter" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="generateDdl" value="false"/>
+                <property name="database" value="MYSQL"/>
+            </bean>
+        </property>
         <property name="jpaProperties">
             <props>
                 <prop key="hibernate.format_sql">true</prop>
@@ -125,14 +131,8 @@
         <property name="packagesToScan" value="com.spring.code.atomikos.order.entity"/>
     </bean>
 
-    <bean id="orderHibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-        <property name="databasePlatform" value="${order.mysql.databasePlatform}"/>
-        <property name="showSql" value="true"/>
-        <property name="generateDdl" value="true"/>
-    </bean>
-
     <!-- Spring Data Jpa配置, 扫描base-package下所有继承于Repository<T,ID>的接口 -->
     <jpa:repositories base-package="com.spring.code.atomikos.order.repository"
                       transaction-manager-ref="transactionManager"
                       entity-manager-factory-ref="orderEntityManagerFactory" />
-</beans>    
+</beans>
