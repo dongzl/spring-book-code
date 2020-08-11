@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd 
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+       default-lazy-init="false">
+
+    <description>多数源 JTA 配置例子,本例子同时使用 2 个 MySQL 数据同时提交、回滚事务</description>
+
+    <!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
+    <context:property-placeholder ignore-resource-not-found="true" location="classpath*:application.properties" />
+
+    <!-- MySQL User DB 数据源配置 -->
+    <bean id="userDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="${user.mysql.jdbc.url}"/>
+        <property name="username" value="${user.mysql.jdbc.username}"/>
+        <property name="password" value="${user.mysql.jdbc.password}"/>
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="10"/>
+        <property name="minIdle" value="10"/>
+        <property name="maxActive" value="10"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="100"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="validationQuery" value="SELECT 'x'"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="dbType" value="mysql"/>
+    </bean>
+    
+    <tx:annotation-driven transaction-manager="userTransactionManager"/>
+
+    <bean id="userTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="userEntityManagerFactory"/>
+        <property name="nestedTransactionAllowed" value="true"/>
+        <property name="defaultTimeout" value="5"/>
+    </bean>
+    <bean id="userEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="userDataSource"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="generateDdl" value="false"/>
+                <property name="database" value="MYSQL"/>
+            </bean>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
+                <prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+                <prop key="hibernate.format_sql">true</prop>
+            </props>
+        </property>
+        <property name="packagesToScan" value="com.spring.code.atomikos.user.entity"/>
+    </bean>
+
+    <jpa:repositories base-package="com.spring.code.atomikos.user.repository"
+                      entity-manager-factory-ref="userEntityManagerFactory"
+                      transaction-manager-ref="userTransactionManager"/>
+    
+    <!-- AbstractTransactionalJUnit4SpringContextTests测试类需要一个名为 dataSource的数据源-->
+    <alias name="userDataSource" alias="dataSource"/>
+    <alias name="userTransactionManager" alias="transactionManager"/>
+
+    <!-- MySQL Order DB 数据源配置 -->
+    <bean id="orderDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="${order.mysql.jdbc.url}"/>
+        <property name="username" value="${order.mysql.jdbc.username}"/>
+        <property name="password" value="${order.mysql.jdbc.password}"/>
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="10"/>
+        <property name="minIdle" value="10"/>
+        <property name="maxActive" value="10"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="100"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="validationQuery" value="SELECT 'x'"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="dbType" value="mysql"/>
+    </bean>
+
+    <bean id="orderTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="orderEntityManagerFactory"/>
+        <property name="nestedTransactionAllowed" value="true"/>
+        <property name="defaultTimeout" value="5"/>
+    </bean>
+    <bean id="orderEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="orderDataSource"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="generateDdl" value="false"/>
+                <property name="database" value="MYSQL"/>
+            </bean>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
+                <prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+                <prop key="hibernate.format_sql">true</prop>
+            </props>
+        </property>
+        <property name="packagesToScan" value="com.spring.code.atomikos.order.entity"/>
+    </bean>
+
+    <jpa:repositories base-package="com.spring.code.atomikos.order.repository"
+                      entity-manager-factory-ref="orderEntityManagerFactory"
+                      transaction-manager-ref="orderTransactionManager"/>
+</beans>    
